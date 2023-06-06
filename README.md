@@ -64,13 +64,15 @@ sql文件在doc中
 
 ### 运行效果
 
+图片也在doc --》 img中
+
 ##### 个人中心
 
 ![image-20230606103018796](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606103018796.png)
 
 ##### 管理员主页
 
-![image-20230606102728701](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102728701.png)
+![image-20230606102728701](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102728701.png)****
 
 ##### 房间分配
 
