@@ -54,7 +54,7 @@ sql文件在doc中
 
 1.修改 application.properties文件
 
-![image-20230606103746253](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606103746253.png)
+![image-20230606103746253](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606103746253.png)
 
 2.**进入vue  使用控制台打开**   npm install  而后 npm run serve 启动前端
 
@@ -66,28 +66,28 @@ sql文件在doc中
 
 ##### 个人中心
 
-![image-20230606103018796](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606103018796.png)
+![image-20230606103018796](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606103018796.png)
 
 ##### 管理员主页
 
-![image-20230606102728701](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606102728701.png)
+![image-20230606102728701](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102728701.png)
 
 ##### 房间分配
 
-![image-20230606102757841](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606102757841.png)
+![image-20230606102757841](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102757841.png)
 
 ##### 公告管理
 
-**![image-20230606102826036](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606102826036.png)**
+**![image-20230606102826036](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102826036.png)**
 
 ##### 报修管理
 
-![image-20230606102903528](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606102903528.png)
+![image-20230606102903528](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102903528.png)
 
 ##### 调宿申请
 
-![image-20230606102924321](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606102924321.png)
+![image-20230606102924321](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102924321.png)
 
 ##### 访客管理
 
-![image-20230606102948727](C:\Users\17862\AppData\Roaming\Typora\typora-user-images\image-20230606102948727.png)
+![image-20230606102948727](D:\Users\Desktop\MyMy\DormitoryManagementSystem\doc\img\image-20230606102948727.png)
