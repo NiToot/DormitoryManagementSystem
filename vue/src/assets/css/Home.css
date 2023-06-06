@@ -1,0 +1,99 @@
+.wv-lt-refresh {
+    display: none;
+}
+
+.topInfo {
+    margin: 0 auto;
+}
+
+.el-colDiv {
+    margin: 20px auto;
+    max-width: 340px;
+    min-width: 200px;
+    overflow: hidden;
+    height: 115px;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    padding-left: 15px;
+    padding-top: 15px;
+    position: relative;
+}
+
+.el-colDiv:hover {
+    background-position: right;
+}
+
+.nowDiv {
+    width: 38px;
+    height: 19px;
+    position: absolute;
+    right: 5%;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.digital {
+    font-size: 25px;
+    line-height: normal;
+    margin-left: 2px;
+}
+
+.title {
+    font-size: 18px;
+}
+
+.last-span {
+    font-size: 13px;
+}
+
+#stuNumDiv {
+    /*background-color: #2e4057;*/
+    background-image: linear-gradient(to left, #FFC312, #EE5A24, #FFC312);
+    background-size: 200%;
+    transition: 0.6s;
+}
+
+#haveRoomDiv {
+    /*background-color: #1398ff;*/
+    background-image: linear-gradient(to left, #C4E538, #009432, #C4E538);
+    background-size: 200%;
+    transition: 0.6s;
+
+}
+
+#repairNum {
+    /*background-color: #008789;*/
+    background-image: linear-gradient(to left, #12CBC4, #0652DD, #12CBC4);
+    background-size: 200%;
+    transition: 0.6s;
+}
+
+#emptyRoom {
+    /*background-color: #ffb400;*/
+    background-image: linear-gradient(to left, #FDA7DF, #9980FA, #FDA7DF);
+    background-size: 200%;
+    transition: 0.6s;
+}
+
+#ssv1-main-text {
+    background-color: #1398ff;
+}
+
+
+#ssv2-main-text {
+    background-color: #2e4057;
+}
+
+
+#ssv3-main-text {
+    background-color: #ffb400;
+}
+
+
+#ssv4-main-text {
+    background-color: #008789;
+}
