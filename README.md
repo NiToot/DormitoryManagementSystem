@@ -1,6 +1,6 @@
 ## DormitorySystem
 
-![IDE](https://img.shields.io/badge/IDE-IntelliJ%20IDEA-brightgreen.svg) ![Java](https://img.shields.io/badge/Java-11-blue.svg) ![Database](https://img.shields.io/badge/Database-MySQL5.7-lightgrey.svg) 
+![IDE](https://img.shields.io/badge/IDE-IntelliJ%20IDEA-brightgreen.svg) ![JDK](https://img.shields.io/badge/Java-11-blue.svg) ![Database](https://img.shields.io/badge/Database-MySQL5.7-lightgrey.svg) 
 
 - 毕业设计
 - SSM框架
@@ -46,7 +46,7 @@ jdk11、maven、node、mysql
 
 #### 5、硬件环境：
 
-Windows 或者 Mac OS
+Windows 或者 Mac OS(不挑剔)
 
 ### 配置
 
@@ -54,7 +54,7 @@ sql文件在doc中
 
 1.修改 application.properties文件
 
-![image-20230606103746253](.\doc\img\image-20230606103746253.png)
+![image-20230606103746253](/doc/img/image-20230606103746253.png)
 
 2.**进入vue  使用控制台打开**   npm install  而后 npm run serve 启动前端
 
@@ -68,28 +68,28 @@ sql文件在doc中
 
 ##### 个人中心
 
-![image-20230606103018796](..\doc\img\image-20230606103018796.png)
+![image-20230606103018796](/doc/img/image-20230606103018796.png)
 
 ##### 管理员主页
 
-![image-20230606102728701](.\doc\img\image-20230606102728701.png)****
+![image-20230606102728701](/doc/img/image-20230606102728701.png)
 
 ##### 房间分配
 
-![image-20230606102757841](.\doc\img\image-20230606102757841.png)
+![image-20230606102757841](/doc/img/image-20230606102757841.png)
 
 ##### 公告管理
 
-**![image-20230606102826036](.\doc\img\image-20230606102826036.png)**
+**![image-20230606102826036](/doc/img/image-20230606102826036.png)**
 
 ##### 报修管理
 
-![image-20230606102903528](.\doc\img\image-20230606102903528.png)
+![image-20230606102903528](/doc/img/image-20230606102903528.png)
 
 ##### 调宿申请
 
-![image-20230606102924321](.\doc\img\image-20230606102924321.png)
+![image-20230606102924321](/doc/img/image-20230606102924321.png)
 
 ##### 访客管理
 
-![image-20230606102948727](.\doc\img\image-20230606102948727.png)
+![image-20230606102948727](/doc/img/image-20230606102948727.png)
