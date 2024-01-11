@@ -1,6 +1,6 @@
 ## DormitorySystem
 
-![IDE](https://img.shields.io/badge/IDE-IntelliJ%20IDEA-brightgreen.svg) ![JDK](https://img.shields.io/badge/Java-11-blue.svg) ![Database](https://img.shields.io/badge/Database-MySQL5.7-lightgrey.svg) 
+![IDE](https://img.shields.io/badge/IDE-IntelliJ%20IDEA-brightgreen.svg) ![JDK](https://img.shields.io/badge/Java-11-blue.svg) ![Database](https://img.shields.io/badge/Database-MySQL5.7-lightgrey.svg)
 
 - 毕业设计
 - SSM框架
@@ -9,11 +9,13 @@
 <img width="48" height="48" src="https://img.icons8.com/emoji/48/china-emoji.png" alt="china-emoji"/>
  <img width="40" height="40" src="https://img.icons8.com/color/30/intellij-idea.png" alt="intellij-idea"/>
 
-有问题联系![qq](https://img.shields.io/badge/QQ-1786234724-blue.svg)
+视问题==》有偿咨询、有偿提供文档资料
+
+![qq](https://img.shields.io/badge/QQ-1786234724-blue.svg)
 
 #### 1、项目介绍
 
-该拥有三种角色：
+该系统拥有三种用户类型：
 
 :older_man:
 
@@ -40,11 +42,11 @@
 ​	后端框架：Springboot、MybatisPlus
 ​	前端技术：ElementUI、vue、css、JavaScript、axios
 
-#### 4、环境：
+#### 4、环境
 
 jdk11、maven、node、mysql
 
-#### 5、硬件环境：
+#### 5、硬件环境
 
 Windows 或者 Mac OS(不挑剔)
 
@@ -71,6 +73,12 @@ sql文件在doc中
 ![个人中心](/doc/img/个人中心.png)
 
 ##### 管理员主页
+
+ECharts 可视化
+
+天气组件
+
+日历组件
 
 ![管理员主页](/doc/img/管理员主页.png)
 
