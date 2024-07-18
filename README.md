@@ -52,7 +52,6 @@ Windows 或者 Mac OS(不挑剔)
 
 ### 配置
 
-sql文件在doc中
 
 1.修改 application.properties文件
 
