@@ -18,6 +18,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      */
     @Resource
     private AdminMapper adminMapper;
+    @Resource private com.example.springboot.security.Accounts accounts;
+    @Resource private com.example.springboot.security.AccessScope scope;
 
     /**
      * 管理员登录
@@ -26,9 +28,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     public Admin adminLogin(String username, String password) {
         QueryWrapper<Admin> qw = new QueryWrapper<>();
         qw.eq("username", username);
-        qw.eq("password", password);
         Admin admin = adminMapper.selectOne(qw);
-        if (admin != null) {
+        if (admin != null && accounts.matches(password, admin.getPassword())) {
             return admin;
         } else {
             return null;
@@ -40,6 +41,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      */
     @Override
     public int updateAdmin(Admin admin) {
+        if (admin.getPassword()!=null && !admin.getPassword().isEmpty()) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST,"请通过独立密码接口修改密码");
+        admin.setPassword(null);
+        admin.setAvatar(null);
         int i = adminMapper.updateById(admin);
         return i;
     }

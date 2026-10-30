@@ -41,14 +41,9 @@ export default {
   created() {
   },
   methods: {
-    SignOut() {
-      sessionStorage.clear()
-      request.get("/main/signOut");
-      ElMessage({
-        message: '用户退出登录',
-        type: 'success',
-      });
-      this.$router.replace({path: '/login'});
+    async SignOut() {
+      try {await request.post('/auth/logout');this.$store.commit('clearUser');this.$router.replace('/Login');ElMessage.success('用户退出登录');}
+      catch (_) { /* The request handler reports failures. */ }
     },
     selfInfoManage() {
       this.$router.push("/selfInfo")

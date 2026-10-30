@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.springboot.common.Result;
 import com.example.springboot.entity.AdjustRoom;
 import com.example.springboot.service.AdjustRoomService;
-import com.example.springboot.service.DormRoomService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -15,10 +14,6 @@ public class AdjustRoomController {
 
     @Resource
     private AdjustRoomService adjustRoomService;
-
-    @Resource
-    private DormRoomService dormRoomService;
-
 
     /**
      * 添加订单
@@ -39,34 +34,16 @@ public class AdjustRoomController {
      * 更新订单
      */
     @PutMapping("/update/{state}")
-    public Result<?> update(@RequestBody AdjustRoom adjustRoom, @PathVariable Boolean state) {
-        if (state) {
-            // 更新房间表信息
-            int i = dormRoomService.adjustRoomUpdate(adjustRoom);
-            if (i == -1) {
-                return Result.error("-1", "重复操作");
-            }
-        }
-        //更新调宿表信息
-        int i = adjustRoomService.updateApply(adjustRoom);
-        if (i == 1) {
-            return Result.success();
-        } else {
-            return Result.error("-1", "更新失败");
-        }
+    public Result<?> update(@RequestBody AdjustRoom request,@PathVariable Boolean state) {
+        adjustRoomService.updateApply(request,state);return Result.success();
     }
 
     /**
      * 删除订单
      */
     @DeleteMapping("/delete/{id}")
-    public Result<?> delete(@PathVariable Integer id) {
-        int i = adjustRoomService.deleteAdjustment(id);
-        if (i == 1) {
-            return Result.success();
-        } else {
-            return Result.error("-1", "删除失败");
-        }
+    public Result<?> delete(@PathVariable Integer id,@RequestParam(required=false) Long version) {
+        adjustRoomService.deleteAdjustment(id,version);return Result.success();
     }
 
     /**

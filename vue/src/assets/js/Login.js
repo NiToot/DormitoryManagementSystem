@@ -38,7 +38,8 @@ export default {
                                 type: "success",
                             });
                             // 登陆成功跳转主页
-                            window.sessionStorage.setItem("user", JSON.stringify(res.data));
+                            this.$store.commit("setUser", res.data);
+                            this.form.password = "";
                             window.sessionStorage.setItem("identity", JSON.stringify(this.form.identity));
                             this.$router.replace({path: "/home"});
                         } else {
@@ -47,7 +48,7 @@ export default {
                                 type: "error",
                             });
                         }
-                    });
+                    }).catch(() => { this.form.password = ""; });
                 }
             });
         },

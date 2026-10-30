@@ -20,10 +20,10 @@ public interface DormRoomService extends IService<DormRoom> {
     int updateNewRoom(DormRoom dormRoom);
 
     //删除房间信息
-    int deleteRoom(Integer dormRoomId);
+    int deleteRoom(Integer dormRoomId, Long version);
 
     //删除床位上的学生信息
-    int deleteBedInfo(String bedName, Integer dormRoomId, int calCurrentNum);
+    int deleteBedInfo(String bedName, Integer dormRoomId, int calCurrentNum, Long version);
 
     //床位信息，查询该学生是否已有宿舍
     DormRoom judgeHadBed(String username);
@@ -35,7 +35,7 @@ public interface DormRoomService extends IService<DormRoom> {
     Long getEachBuildingStuNum(int dormBuildId);
 
     //根据调宿申请 更新房间住宿信息
-    int adjustRoomUpdate(AdjustRoom adjustRoom);
+
 
     // 检查该房间是否满了
     DormRoom checkRoomState(Integer dormRoomId);

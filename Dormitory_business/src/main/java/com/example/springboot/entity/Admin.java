@@ -21,6 +21,8 @@ public class Admin {
     @TableId(value = "username")
     private String username;
     @TableField(value = "password")
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    @lombok.ToString.Exclude
     private String password;
     @TableField(value = "name")
     private String name;

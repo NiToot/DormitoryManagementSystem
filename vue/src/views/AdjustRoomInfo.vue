@@ -54,7 +54,7 @@
                          @click="showDetail(scope.row)"></el-button>
               <el-button v-if="scope.row.state!=='通过' " icon="Edit" type="primary"
                          @click="handleEdit(scope.row)"></el-button>
-              <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
+              <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row)">
                 <template #reference>
                   <el-button icon="Delete" type="danger"></el-button>
                 </template>

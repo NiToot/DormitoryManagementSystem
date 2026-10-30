@@ -120,7 +120,7 @@ export default {
             this.$nextTick(() => {
                 this.$refs.form.resetFields();
                 this.disabled = false;
-                this.form = {};
+                this.form = {currentCapacity:0};
                 this.judge = false;
             });
         },
@@ -145,7 +145,7 @@ export default {
                                     type: "error",
                                 });
                             }
-                        });
+                        }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
                     } else {
                         //修改
                         request.put("/room/update", this.form).then((res) => {
@@ -163,7 +163,7 @@ export default {
                                     type: "error",
                                 });
                             }
-                        });
+                        }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
                     }
                 }
             });
@@ -185,9 +185,9 @@ export default {
                 this.disabled = true;
             });
         },
-        handleDelete(dormRoomId) {
+        handleDelete(row) {
             //删除
-            request.delete("/room/delete/" + dormRoomId).then((res) => {
+            request.delete("/room/delete/" + row.dormRoomId, {params:{version:row.version}}).then((res) => {
                 if (res.code === "0") {
                     ElMessage({
                         message: "删除成功",
@@ -201,7 +201,7 @@ export default {
                         type: "error",
                     });
                 }
-            });
+            }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
         },
         calCurrentNum(info) {
             this.havePeopleNum = 0;
@@ -293,7 +293,7 @@ export default {
                                 type: "error",
                             });
                         }
-                    });
+                    }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
                 }
             });
         },
@@ -317,7 +317,7 @@ export default {
                                 type: "error",
                             });
                         }
-                    });
+                    }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
                 }
             });
         },
@@ -341,7 +341,8 @@ export default {
                 "/" +
                 info.dormRoomId +
                 "/" +
-                this.havePeopleNum
+                this.havePeopleNum,
+                {params:{version:info.version}}
             ).then((res) => {
                 if (res.code === "0") {
                     ElMessage({
@@ -358,7 +359,7 @@ export default {
                         type: "error",
                     });
                 }
-            });
+            }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
         },
         handleSizeChange(pageSize) {
             //改变每页个数

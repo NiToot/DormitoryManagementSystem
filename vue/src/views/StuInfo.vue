@@ -17,7 +17,7 @@
             <el-button icon="refresh-left" style="margin-left: 10px" type="default" @click="reset"></el-button>
             <div style="float: right">
               <el-tooltip content="添加" placement="top">
-                <el-button icon="plus" style="width: 50px" type="primary" @click="add"></el-button>
+                <el-button v-if="$store.state.identity==='admin'" icon="plus" style="width: 50px" type="primary" @click="add"></el-button>
               </el-tooltip>
             </div>
           </div>
@@ -46,7 +46,7 @@
               <el-button icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
               <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.username)">
                 <template #reference>
-                  <el-button icon="Delete" type="danger"></el-button>
+                  <el-button v-if="$store.state.identity==='admin'" icon="Delete" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -72,7 +72,7 @@
               <el-form-item label="学号" prop="username">
                 <el-input v-model="form.username" :disabled="judgeAddOrEdit" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="密码" prop="password">
+              <el-form-item v-if="!judge" label="初始密码" prop="password">
                 <el-input v-model="form.password" :disabled="disabled" :show-password="showpassword"
                           style="width: 80%"></el-input>
                 <el-tooltip content="修改密码" placement="right">
@@ -82,7 +82,7 @@
                   </el-icon>
                 </el-tooltip>
               </el-form-item>
-              <el-form-item :style="display" label="确认密码" prop="checkPass">
+              <el-form-item v-if="!judge" :style="display" label="确认密码" prop="checkPass">
                 <el-input v-model="form.checkPass" :show-password="showpassword" style="width: 80%"
                 ></el-input>
               </el-form-item>

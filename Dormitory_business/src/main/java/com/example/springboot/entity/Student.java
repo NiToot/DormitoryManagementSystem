@@ -22,6 +22,8 @@ public class Student {
     @TableId(value = "username")
     private String username;
     @TableField("password")
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    @lombok.ToString.Exclude
     private String password;
     @TableField("name")
     private String name;

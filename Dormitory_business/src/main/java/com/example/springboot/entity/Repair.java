@@ -17,10 +17,12 @@ import lombok.NoArgsConstructor;
 @TableName(value = "repair")
 public class Repair {
 
-    @TableId(value = "id")
+    @TableId(value = "id", type = com.baomidou.mybatisplus.annotation.IdType.AUTO)
     private Integer id;
     @TableField("repairer")
     private String repairer;
+    @TableField("student_username")
+    private String studentUsername;
     @TableField("dormbuild_id")
     private int dormBuildId;
     @TableField("dormroom_id")

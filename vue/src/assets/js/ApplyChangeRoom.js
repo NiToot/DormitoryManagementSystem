@@ -155,7 +155,7 @@ export default {
                                     type: "error",
                                 });
                             }
-                        });
+                        }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
                     } else if (this.judgeOption === true) {
                         //添加
                         request.post("/adjustRoom/add", this.form).then((res) => {
@@ -173,7 +173,7 @@ export default {
                                     type: "error",
                                 });
                             }
-                        });
+                        }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
                     }
                 }
             });

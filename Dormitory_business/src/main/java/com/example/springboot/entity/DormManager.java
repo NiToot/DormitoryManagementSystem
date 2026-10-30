@@ -20,6 +20,8 @@ public class DormManager {
     @TableId("username")
     private String username;
     @TableField("password")
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    @lombok.ToString.Exclude
     private String password;
     @TableField("dormbuild_id")
     private int dormBuildId;

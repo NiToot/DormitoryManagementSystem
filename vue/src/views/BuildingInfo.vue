@@ -16,7 +16,7 @@
             <el-button icon="refresh-left" style="margin-left: 10px" type="default" @click="reset"></el-button>
             <div style="float: right">
               <el-tooltip content="添加" placement="top">
-                <el-button icon="plus" style="width: 50px" type="primary" @click="add"></el-button>
+                <el-button v-if="$store.state.identity==='admin'" icon="plus" style="width: 50px" type="primary" @click="add"></el-button>
               </el-tooltip>
             </div>
           </div>
@@ -40,11 +40,11 @@
           <!--      操作栏-->
           <el-table-column label="操作" width="130px">
             <template #default="scope">
-              <el-button icon="Edit" type="primary" @click="handleEdit(scope.row)"
+              <el-button v-if="$store.state.identity==='admin'" icon="Edit" type="primary" @click="handleEdit(scope.row)"
               ></el-button>
               <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
                 <template #reference>
-                  <el-button icon="Delete" type="danger"></el-button>
+                  <el-button v-if="$store.state.identity==='admin'" icon="Delete" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </template>

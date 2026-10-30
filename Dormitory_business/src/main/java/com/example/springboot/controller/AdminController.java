@@ -19,22 +19,7 @@ public class AdminController {
     @Resource
     private AdminService adminService;
 
-    /**
-     * 管理员登录
-     */
-    @PostMapping("/login")
-    public Result<?> login(@RequestBody User user, HttpSession session) {
-        Object o = adminService.adminLogin(user.getUsername(), user.getPassword());
-        if (o != null) {
-            System.out.println(o);
-            //存入session
-            session.setAttribute("Identity", "admin");
-            session.setAttribute("User", o);
-            return Result.success(o);
-        } else {
-            return Result.error("-1", "用户名或密码错误");
-        }
-    }
+
 
     /**
      * 管理员信息更新

@@ -23,6 +23,8 @@ public class Visitor {
     private Integer id;
     @TableField("name")
     private String visitorName;
+    @TableField("dormbuild_id")
+    private Integer dormBuildId;
     @TableField("gender")
     private String gender;
     @TableField("phone_num")

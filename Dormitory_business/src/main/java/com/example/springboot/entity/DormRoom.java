@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @TableName(value = "dorm_room")
 public class DormRoom {
 
+    private Long version;
+
     @TableId(value = "dormroom_id")
     private Integer dormRoomId;
     @TableField("dormbuild_id")

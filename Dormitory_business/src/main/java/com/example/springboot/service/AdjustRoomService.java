@@ -10,10 +10,10 @@ public interface AdjustRoomService extends IService<AdjustRoom> {
     Page find(Integer pageNum, Integer pageSize, String search);
 
     //删除调宿申请
-    int deleteAdjustment(Integer id);
+    int deleteAdjustment(Integer id, Long version);
 
     //更新
-    int updateApply(AdjustRoom adjustRoom);
+    int updateApply(AdjustRoom adjustRoom, Boolean approved);
 
     // 添加
     int addApply(AdjustRoom adjustRoom);

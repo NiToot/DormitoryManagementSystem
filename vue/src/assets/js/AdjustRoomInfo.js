@@ -143,7 +143,7 @@ export default {
                                 type: "error",
                             });
                         }
-                    });
+                    }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
                 }
             });
         },
@@ -169,9 +169,9 @@ export default {
                 this.form = JSON.parse(JSON.stringify(row));
             });
         },
-        async handleDelete(id) {
+        async handleDelete(row) {
             //删除
-            request.delete("/adjustRoom/delete/" + id).then((res) => {
+            request.delete("/adjustRoom/delete/" + row.id,{params:{version:row.version}}).then((res) => {
                 if (res.code === "0") {
                     ElMessage({
                         message: "删除成功",
@@ -185,7 +185,7 @@ export default {
                         type: "error",
                     });
                 }
-            });
+            }).catch(error => { if(error.response && error.response.status===409) { this.load(); this.dialogVisible=false; this.bedDialog=false; this.detailDialog=false; } });
         },
         handleSizeChange(pageSize) {
             //改变每页个数

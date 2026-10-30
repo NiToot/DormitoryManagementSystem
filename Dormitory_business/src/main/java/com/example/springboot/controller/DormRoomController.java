@@ -15,6 +15,8 @@ public class DormRoomController {
 
     @Resource
     private DormRoomService dormRoomService;
+    @Resource private com.example.springboot.security.AccessScope scope;
+    @Resource private com.example.springboot.service.DormBuildService builds;
 
     /**
      * 添加房间
@@ -46,8 +48,8 @@ public class DormRoomController {
      * 删除房间
      */
     @DeleteMapping("/delete/{dormRoomId}")
-    public Result<?> delete(@PathVariable Integer dormRoomId) {
-        int i = dormRoomService.deleteRoom(dormRoomId);
+    public Result<?> delete(@PathVariable Integer dormRoomId, @RequestParam(required=false) Long version) {
+        int i = dormRoomService.deleteRoom(dormRoomId,version);
         if (i == 1) {
             return Result.success();
         } else {
@@ -87,8 +89,8 @@ public class DormRoomController {
      * 删除床位学生信息
      */
     @DeleteMapping("/delete/{bedName}/{dormRoomId}/{calCurrentNum}")
-    public Result<?> deleteBedInfo(@PathVariable String bedName, @PathVariable Integer dormRoomId, @PathVariable int calCurrentNum) {
-        int i = dormRoomService.deleteBedInfo(bedName, dormRoomId, calCurrentNum);
+    public Result<?> deleteBedInfo(@PathVariable String bedName, @PathVariable Integer dormRoomId, @PathVariable int calCurrentNum, @RequestParam(required=false) Long version) {
+        int i = dormRoomService.deleteBedInfo(bedName, dormRoomId, calCurrentNum, version);
         if (i == 1) {
             return Result.success();
         } else {
@@ -101,6 +103,7 @@ public class DormRoomController {
      */
     @GetMapping("/judgeHadBed/{value}")
     public Result<?> judgeHadBed(@PathVariable String value) {
+        scope.studentRecord(value);
         DormRoom dormRoom = dormRoomService.judgeHadBed(value);
         if (dormRoom == null) {
             return Result.success();
@@ -128,8 +131,8 @@ public class DormRoomController {
     @GetMapping("/getEachBuildingStuNum/{num}")
     public Result<?> getEachBuildingStuNum(@PathVariable int num) {
         ArrayList<Long> arrayList = new ArrayList();
-        for (int i = 1; i <= num; i++) {
-            Long eachBuildingStuNum = dormRoomService.getEachBuildingStuNum(i);
+        for (com.example.springboot.entity.DormBuild building : builds.getBuildingId()) {
+            Long eachBuildingStuNum = dormRoomService.getEachBuildingStuNum(building.getDormBuildId());
             arrayList.add(eachBuildingStuNum);
         }
 
@@ -145,8 +148,16 @@ public class DormRoomController {
      */
     @GetMapping("/getMyRoom/{name}")
     public Result<?> getMyRoom(@PathVariable String name) {
+        scope.studentRecord(name);
         DormRoom dormRoom = dormRoomService.judgeHadBed(name);
         if (dormRoom != null) {
+            if(scope.student()){
+                String me=scope.user().username;
+                if(dormRoom.getFirstBed()!=null && !me.equals(dormRoom.getFirstBed()))dormRoom.setFirstBed("已入住");
+                if(dormRoom.getSecondBed()!=null && !me.equals(dormRoom.getSecondBed()))dormRoom.setSecondBed("已入住");
+                if(dormRoom.getThirdBed()!=null && !me.equals(dormRoom.getThirdBed()))dormRoom.setThirdBed("已入住");
+                if(dormRoom.getFourthBed()!=null && !me.equals(dormRoom.getFourthBed()))dormRoom.setFourthBed("已入住");
+            }
             return Result.success(dormRoom);
         } else {
             return Result.error("-1", "不存在该生");
@@ -160,7 +171,7 @@ public class DormRoomController {
     public Result<?> checkRoomState(@PathVariable Integer dormRoomId) {
         DormRoom dormRoom = dormRoomService.checkRoomState(dormRoomId);
         if (dormRoom != null) {
-            return Result.success(dormRoom);
+            return Result.success();
         } else {
             return Result.error("-1", "该房间人满了");
         }
@@ -171,9 +182,10 @@ public class DormRoomController {
      */
     @GetMapping("/checkBedState/{dormRoomId}/{bedNum}")
     public Result<?> getMyRoom(@PathVariable Integer dormRoomId, @PathVariable int bedNum) {
+        if(bedNum<1 || bedNum>4)throw new IllegalArgumentException("Invalid bed");
         DormRoom dormRoom = dormRoomService.checkBedState(dormRoomId, bedNum);
         if (dormRoom != null) {
-            return Result.success(dormRoom);
+            return Result.success();
         } else {
             return Result.error("-1", "该床位已有人");
         }
@@ -186,7 +198,7 @@ public class DormRoomController {
     public Result<?> checkRoomExist(@PathVariable Integer dormRoomId) {
         DormRoom dormRoom = dormRoomService.checkRoomExist(dormRoomId);
         if (dormRoom != null) {
-            return Result.success(dormRoom);
+            return Result.success();
         } else {
             return Result.error("-1", "不存在该房间");
         }

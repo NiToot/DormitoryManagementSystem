@@ -1,3 +1,5 @@
+import store from '@/store'
+import request from '@/utils/request'
 import Layout from '../layout/Layout.vue'
 import {createRouter, createWebHistory} from "vue-router";
 
@@ -26,28 +28,23 @@ export const constantRoutes = [
     },
 
 ]
+const management = ['admin', 'dormManager'];
+const access = {StuInfo: management, DormManagerInfo: ['admin'], BuildingInfo: management, RoomInfo: management,
+ NoticeInfo: ['admin'], AdjustRoomInfo: management, RepairInfo: management, VisitorInfo: management,
+ MyRoomInfo: ['stu'], ApplyRepairInfo: ['stu'], ApplyChangeRoom: ['stu']};
+constantRoutes.forEach(route => (route.children || []).forEach(child => { child.meta = {roles: access[child.name]}; }));
 const router = createRouter({
     routes: constantRoutes,
     history: createWebHistory(process.env.BASE_URL)
 })
-//路由守卫
-router.beforeEach((to, from, next) => {
-    //to 要访问的路径
-    //from 代表从哪个路径跳转而来
-    // next 是函数，表示放行
-    // next() 放行
-    // next('/*') 强制跳转
-    const user = window.sessionStorage.getItem('user')
-    if (to.path === '/Login') {
-        return next();
-    }
-    if (!user) {
-        return next('/Login')
-    }
-    if (to.path === '/' && user) {
-        return next('/home')
-    }
-    next()
-})
-
-export default router
+router.beforeEach(async (to, from, next) => {
+ if(to.path.toLowerCase()==='/login')return next();
+ if(!store.state.initialized) {
+  try {const response=await request.get('/auth/me',{skipAuthRedirect:true});store.commit('setUser',response.data);}
+  catch (_) {store.commit('clearUser');}
+ }
+ if(!store.state.user)return next('/Login');
+ if(to.meta.roles && !to.meta.roles.includes(store.state.identity))return next('/home');
+ return next(to.path==='/'?'/home':undefined);
+});
+export default router;

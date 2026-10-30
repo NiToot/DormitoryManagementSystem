@@ -72,7 +72,7 @@
               <el-form-item label="账号" prop="username">
                 <el-input v-model="form.username" :disabled="judgeAddOrEdit" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="密码" prop="password">
+              <el-form-item v-if="!judge" label="初始密码" prop="password">
                 <el-input v-model="form.password" :disabled="disabled" :show-password="showpassword"
                           style="width: 80%"></el-input>
                 <el-tooltip content="修改密码" placement="right">
@@ -82,7 +82,7 @@
                   </el-icon>
                 </el-tooltip>
               </el-form-item>
-              <el-form-item :style="display" label="确认密码" prop="checkPass">
+              <el-form-item v-if="!judge" :style="display" label="确认密码" prop="checkPass">
                 <el-input v-model="form.checkPass" :show-password="showpassword" style="width: 80%"></el-input>
               </el-form-item>
               <el-form-item label="姓名" prop="name">

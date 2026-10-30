@@ -108,40 +108,16 @@ export default {
   },
   methods: {
     init() {
-      request.get("/main/loadIdentity").then((res) => {
-        if (res.code !== "0") {
-          ElMessage({
-            message: '用户会话过期',
-            type: 'error',
-          });
-          sessionStorage.clear()
-          request.get("/main/signOut");
-
-        }
-        window.sessionStorage.setItem("identity", JSON.stringify(res.data));
-        this.identity = res.data
-      });
-      request.get("/main/loadUserInfo").then((result) => {
-        if (result.code !== "0") {
-          ElMessage({
-            message: '用户会话过期',
-            type: 'error',
-          });
-          request.get("/main/signOut");
-          sessionStorage.clear()
-          this.$router.replace({path: "/login"});
-        }
-        window.sessionStorage.setItem("user", JSON.stringify(result.data));
-        this.user = result.data
-      });
+      this.user = this.$store.state.user;
+      this.identity = this.$store.state.identity;
     },
     judgeIdentity() {
       if (this.identity === 'stu') {
         return 0
       } else if (this.identity === 'dormManager') {
         return 1
-      } else
-        return 2
+      } else if(this.identity === 'admin') return 2;
+      return -1
     }
   },
 }

@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Local runtime, private configuration, and generated frontend files
+.runtime/
+vue/node_modules/
+vue/dist/
+Dormitory_business/src/main/resources/application-local.properties
+*.log
+Dormitory_business/data/

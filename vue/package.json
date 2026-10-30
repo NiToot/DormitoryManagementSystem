@@ -2,20 +2,24 @@
   "name": "demo",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22 <23",
+    "npm": ">=10 <11"
+  },
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "serve": "node --openssl-legacy-provider node_modules/@vue/cli-service/bin/vue-cli-service.js serve --host 127.0.0.1",
+    "build": "node --openssl-legacy-provider node_modules/@vue/cli-service/bin/vue-cli-service.js build"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^0.2.7",
+    "@element-plus/icons-vue": "0.2.7",
     "axios": "^0.25.0",
     "core-js": "^3.6.5",
-    "echarts": "^5.3.0",
-    "element-plus": "^2.0.1",
-    "vue": "^3.0.0",
+    "echarts": "5.3.0",
+    "element-plus": "2.0.1",
+    "vue": "3.2.31",
     "vue-axios": "^3.4.1",
-    "vue-router": "^4.0.13",
-    "vuex": "^4.0.0-0",
+    "vue-router": "4.0.13",
+    "vuex": "4.0.2",
     "wangeditor": "^4.7.11"
   },
   "devDependencies": {
@@ -23,7 +27,7 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/compiler-sfc": "3.2.31",
     "element": "^0.1.4"
   },
   "browserslist": [

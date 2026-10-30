@@ -16,11 +16,12 @@
             <el-button icon="refresh-left" style="margin-left: 10px" type="default" @click="reset"></el-button>
             <div style="float: right">
               <el-tooltip content="添加" placement="top">
-                <el-button icon="plus" style="width: 50px" type="primary" @click="add"></el-button>
+                <el-button v-if="$store.state.identity==='admin'" icon="plus" style="width: 50px" type="primary" @click="add"></el-button>
               </el-tooltip>
             </div>
           </div>
         </div>
+        <p style="color:#606266;font-size:13px">已占床位请先办理退宿或调宿；数据变化时会刷新列表，请重新打开操作。</p>
         <!--    表格-->
         <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%">
           <el-table-column label="#" type="index"/>
@@ -41,10 +42,7 @@
                         <el-icon @click="detailIcon(1, props.row)">
                           <more-filled/>
                         </el-icon>
-                        <el-icon @click="editIcon(1, props.row)">
-                          <edit/>
-                        </el-icon>
-                        <el-popconfirm title="确认删除？" @confirm="deleteStuBed(1, props.row)">
+                        <el-popconfirm title="确认办理退宿？" @confirm="deleteStuBed(1, props.row)">
                           <template #reference>
                             <el-icon>
                               <delete/>
@@ -68,10 +66,7 @@
                         <el-icon @click="detailIcon(2, props.row)">
                           <more-filled/>
                         </el-icon>
-                        <el-icon @click="editIcon(2, props.row)">
-                          <edit/>
-                        </el-icon>
-                        <el-popconfirm title="确认删除？" @confirm="deleteStuBed(2, props.row)">
+                        <el-popconfirm title="确认办理退宿？" @confirm="deleteStuBed(2, props.row)">
                           <template #reference>
                             <el-icon>
                               <delete/>
@@ -95,10 +90,7 @@
                         <el-icon @click="detailIcon(3, props.row)">
                           <more-filled/>
                         </el-icon>
-                        <el-icon @click="editIcon(3, props.row)">
-                          <edit/>
-                        </el-icon>
-                        <el-popconfirm title="确认删除？" @confirm="deleteStuBed(3, props.row)">
+                        <el-popconfirm title="确认办理退宿？" @confirm="deleteStuBed(3, props.row)">
                           <template #reference>
                             <el-icon>
                               <delete/>
@@ -122,10 +114,7 @@
                         <el-icon @click="detailIcon(4, props.row)">
                           <more-filled/>
                         </el-icon>
-                        <el-icon @click="editIcon(4, props.row)">
-                          <edit/>
-                        </el-icon>
-                        <el-popconfirm title="确认删除？" @confirm="deleteStuBed(4, props.row)">
+                        <el-popconfirm title="确认办理退宿？" @confirm="deleteStuBed(4, props.row)">
                           <template #reference>
                             <el-icon>
                               <delete/>
@@ -162,9 +151,9 @@
             <template #default="scope">
               <el-button icon="Edit" type="primary" @click="handleEdit(scope.row)"
               ></el-button>
-              <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.dormRoomId)">
+              <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row)">
                 <template #reference>
-                  <el-button icon="Delete" type="danger"></el-button>
+                  <el-button v-if="$store.state.identity==='admin'" icon="Delete" type="danger"></el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -200,7 +189,7 @@
                 <el-input v-model.number="form.maxCapacity" style="width: 80%"></el-input>
               </el-form-item>
               <el-form-item label="已住人数" prop="currentCapacity">
-                <el-input v-model.number="form.currentCapacity" style="width: 80%"></el-input>
+                <el-input v-model.number="form.currentCapacity" disabled title="根据实际床位自动计算" style="width: 80%"></el-input>
               </el-form-item>
             </el-form>
             <template #footer>

@@ -72,24 +72,7 @@ public class StudentController {
         }
     }
 
-    /**
-     * 学生登录
-     */
-    @PostMapping("/login")
-    public Result<?> login(@RequestBody User user, HttpSession session) {
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
-        Object o = studentService.stuLogin(user.getUsername(), user.getPassword());
-        if (o != null) {
-            System.out.println(o);
-            //存入session
-            session.setAttribute("Identity", "stu");
-            session.setAttribute("User", o);
-            return Result.success(o);
-        } else {
-            return Result.error("-1", "用户名或密码错误");
-        }
-    }
+
 
     /**
      * 主页顶部：学生统计

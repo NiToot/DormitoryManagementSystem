@@ -21,6 +21,9 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
      */
     @Resource
     private DormBuildMapper dormBuildMapper;
+    @Resource private com.example.springboot.security.AccessScope scope;
+    @Resource private com.example.springboot.service.AccommodationGuard accommodation;
+    @Resource private org.springframework.jdbc.core.JdbcTemplate jdbc;
 
     /**
      * 楼宇添加
@@ -39,6 +42,7 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
         Page page = new Page<>(pageNum, pageSize);
         QueryWrapper<DormBuild> qw = new QueryWrapper<>();
         qw.like("DormBuild_id", search);
+        scope.rooms(qw);
         Page buildingPage = dormBuildMapper.selectPage(page, qw);
         return buildingPage;
     }
@@ -47,7 +51,11 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
      * 楼宇信息更新
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public int updateNewBuilding(DormBuild dormBuild) {
+        accommodation.lock();DormBuild old=dormBuildMapper.selectById(dormBuild.getId());
+        com.example.springboot.service.AccommodationGuard.conflict(old!=null,"楼宇不存在");
+        if(old.getDormBuildId()!=dormBuild.getDormBuildId())requireNoReferences(old.getDormBuildId());
         int i = dormBuildMapper.updateById(dormBuild);
         return i;
     }
@@ -56,9 +64,17 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
      * 楼宇删除
      */
     @Override
+    @org.springframework.transaction.annotation.Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public int deleteBuilding(Integer id) {
+        accommodation.lock();DormBuild old=dormBuildMapper.selectById(id);
+        com.example.springboot.service.AccommodationGuard.conflict(old!=null,"楼宇不存在");requireNoReferences(old.getDormBuildId());
         int i = dormBuildMapper.deleteById(id);
         return i;
+    }
+
+    private void requireNoReferences(int building) {
+        for(String table:new String[]{"dorm_room","dorm_manager","repair","visitor"})
+            com.example.springboot.service.AccommodationGuard.conflict(jdbc.queryForObject("SELECT COUNT(*) FROM "+table+" WHERE dormbuild_id=?",Integer.class,building)==0,"楼宇仍有关联记录，不能删除或变更编号");
     }
 
     /**
@@ -68,6 +84,8 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
     public List<DormBuild> getBuildingId() {
         QueryWrapper<DormBuild> qw = new QueryWrapper<>();
         qw.select("dormbuild_id");
+        scope.rooms(qw);
+        qw.orderByAsc("dormbuild_id");
         List<DormBuild> dormBuilds = dormBuildMapper.selectList(qw);
         return dormBuilds;
     }

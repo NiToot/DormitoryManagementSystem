@@ -24,6 +24,7 @@
         <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%">
           <el-table-column label="#" type="index"/>
           <el-table-column label="姓名" prop="visitorName" width="150px"/>
+          <el-table-column label="楼宇号" prop="dormBuildId" width="100px"/>
           <el-table-column
               :filter-method="filterTag"
               :filters="[
@@ -68,6 +69,9 @@
         <div>
           <el-dialog v-model="dialogVisible" title="操作" width="30%" @close="cancel">
             <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+              <el-form-item v-if="$store.state.identity==='admin'" label="来访楼宇" prop="dormBuildId" :rules="[{required:true,message:'请输入有效楼宇号'}]">
+                <el-input v-model.number="form.dormBuildId" placeholder="楼宇号，例如 1" style="width:50%" />
+              </el-form-item>
               <el-form-item label="姓名" prop="visitorName">
                 <el-input v-model="form.visitorName" clearable style="width: 50%"></el-input>
               </el-form-item>

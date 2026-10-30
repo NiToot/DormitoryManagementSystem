@@ -1,238 +1,63 @@
-import request from "@/utils/request";
+import request from '@/utils/request';
+import {ElMessage} from 'element-plus';
 
-const {ElMessage} = require("element-plus");
 export default {
-    name: "selfInfo",
+    name: 'SelfInfo',
     data() {
-        // 手机号验证
-        const checkPhone = (rule, value, callback) => {
-            const phoneReg = /^1[3|4|5|6|7|8][0-9]{9}$/;
-            if (!value) {
-                return callback(new Error("电话号码不能为空"));
-            }
-            setTimeout(() => {
-                if (!Number.isInteger(+value)) {
-                    callback(new Error("请输入数字值"));
-                } else {
-                    if (phoneReg.test(value)) {
-                        callback();
-                    } else {
-                        callback(new Error("电话号码格式不正确"));
-                    }
-                }
-            }, 100);
-        };
-        const checkPass = (rule, value, callback) => {
-            if (!this.editJudge) {
-                console.log("验证");
-                if (value == "") {
-                    callback(new Error("请再次输入密码"));
-                } else if (value !== this.form.password) {
-                    callback(new Error("两次输入密码不一致!"));
-                } else {
-                    callback();
-                }
-            } else {
-                console.log("不验证");
-                callback();
-            }
-        };
         return {
-            showpassword: true,
-            image: "",
-            editJudge: true,
-            disabled: true,
-            dialogVisible: false,
-            identity: "",
-            username: "",
-            name: "",
-            gender: "",
-            age: "",
-            phoneNum: "",
-            email: "",
-            targetURL: "",
-            avatar: "",
-            form: {
-                username: "",
-                name: "",
-                gender: "",
-                age: "",
-                phoneNum: "",
-                email: "",
-            },
-            rules: {
-                username: [
-                    {required: true, message: "请输入账号", trigger: "blur"},
-                    {
-                        pattern: /^[a-zA-Z0-9]{4,9}$/,
-                        message: "必须由 4 到 9 个字母或数字组成",
-                        trigger: "blur",
-                    },
-                ],
-                name: [
-                    {required: true, message: "请输入姓名", trigger: "blur"},
-                    {
-                        pattern: /^(?:[\u4E00-\u9FA5·]{2,10})$/,
-                        message: "必须由 2 到 10 个汉字组成",
-                        trigger: "blur",
-                    },
-                ],
-                gender: [{required: true, message: "请选择性别", trigger: "change"}],
-                age: [
-                    {required: true, message: "请输入年龄", trigger: "blur"},
-                    {type: "number", message: "年龄必须为数字值", trigger: "blur"},
-                    {
-                        pattern: /^(1|[1-9]\d?|100)$/,
-                        message: "范围：1-100",
-                        trigger: "blur",
-                    },
-                ],
-                phoneNum: [{required: true, validator: checkPhone, trigger: "blur"}],
-                email: [
-                    {type: "email", message: "请输入正确的邮箱地址", trigger: "blur"},
-                ],
-                password: [
-                    {required: true, message: "请输入密码", trigger: "blur"},
-                    {
-                        min: 6,
-                        max: 32,
-                        message: "长度在 6 到 16 个字符",
-                        trigger: "blur",
-                    },
-                ],
-                checkPass: [{validator: checkPass, trigger: "blur"}],
-            },
-            display: {
-                display: "none",
-            },
-            imgDisplay: {
-                display: "none",
-            },
+            username: '', name: '', gender: '', age: '', phoneNum: '', email: '', avatar: '',
+            image: '', imgDisplay: {display: 'none'}, form: {}, dialogVisible: false,
+            passwordDialog: false, passwordForm: {currentPassword: '', newPassword: '', confirmPassword: ''},
+            rules: {name: [{required: true, message: '请输入姓名', trigger: 'blur'}]}
         };
     },
-    created() {
-        this.load();
-        this.find();
-        this.init(this.avatar);
-    },
+    created() { this.find().catch(() => {}); },
     methods: {
-        //获取个人信息页面信息
         load() {
-            this.form = JSON.parse(sessionStorage.getItem("user"));
-            this.identity = JSON.parse(sessionStorage.getItem("identity"));
-            this.username = this.form.username;
-            this.name = this.form.name;
-            this.gender = this.form.gender;
-            this.age = this.form.age;
-            this.phoneNum = this.form.phoneNum;
-            this.email = this.form.email;
-            this.avatar = this.form.avatar;
+            const profile = this.$store.state.user || {};
+            ['username', 'name', 'gender', 'age', 'phoneNum', 'email', 'avatar'].forEach(key => { this[key] = profile[key] });
         },
-        //查询数据，更新session
-        find() {
-            this.form = JSON.parse(sessionStorage.getItem("user"));
-            request.post("/" + this.identity + "/login", this.form).then((res) => {
-                //更新sessionStorage
-                window.sessionStorage.setItem("user", JSON.stringify(res.data));
-                //更新页面数据
-                this.load();
+        async find() {
+            const result = await request.get('/auth/me');
+            this.$store.commit('setUser', result.data); this.load(); await this.init(this.avatar);
+        },
+        Edit() { this.form = {...this.$store.state.user}; this.dialogVisible = true; },
+        cancel() { this.dialogVisible = false; },
+        save() {
+            this.$refs.form.validate(async valid => {
+                if (!valid) return;
+                const body = {};
+                ['name', 'age', 'gender', 'phoneNum', 'email'].forEach(key => { body[key] = this.form[key] });
+                try {
+                    const result = await request.put('/auth/profile', body);
+                    this.$store.commit('setUser', result.data); this.load(); this.dialogVisible = false;
+                    ElMessage.success('个人资料已更新');
+                } catch (_) { /* Unified request error handler displays the failure. */ }
             });
         },
-        Edit() {
-            this.dialogVisible = true;
-            this.$nextTick(() => {
-                this.$refs.form.resetFields();
-                this.form = JSON.parse(sessionStorage.getItem("user"));
-            });
+        openPassword() { this.passwordForm = {currentPassword: '', newPassword: '', confirmPassword: ''}; this.passwordDialog = true; },
+        async changePassword() {
+            const {currentPassword, newPassword, confirmPassword} = this.passwordForm;
+            if (!currentPassword || newPassword.length < 8 || newPassword !== confirmPassword) {
+                ElMessage.error('请输入原密码，新密码至少8位且两次输入一致'); return;
+            }
+            try {
+                await request.post('/auth/password', {currentPassword, newPassword});
+                this.passwordForm = {currentPassword: '', newPassword: '', confirmPassword: ''};
+                this.$store.commit('clearUser'); ElMessage.success('密码已更新，请重新登录'); this.$router.replace('/Login');
+            } catch (_) { /* Keep the form available for correction. */ }
         },
-        cancel() {
-            this.$refs.form.resetFields();
-            this.display = {display: "none"};
-            this.showpassword = true;
-            this.editJudge = true;
-            this.disabled = true;
-            this.dialogVisible = false;
-        },
-        async save() {
-            this.$refs.form.validate(async (valid) => {
-                if (valid) {
-                    //修改
-                    await request.put("/" + this.identity + "/update", this.form).then((res) => {
-                        if (res.code === "0") {
-                            ElMessage({
-                                message: "修改成功",
-                                type: "success",
-                            });
-                            //更新sessionStorage
-                            window.sessionStorage.setItem(
-                                "user",
-                                JSON.stringify(this.form)
-                            );
-                            this.find();
-                            this.dialogVisible = false;
-                        } else {
-                            ElMessage({
-                                message: res.msg,
-                                type: "error",
-                            });
-                        }
-                    });
-                }
-            });
-        },
-        EditPass() {
-            if (this.editJudge) {
-                this.display = {display: "flex"};
-                this.showpassword = false;
-                this.disabled = false;
-                this.editJudge = false;
-            } else {
-                this.display = {display: "none"};
-                this.showpassword = true;
-                this.editJudge = true;
-                this.disabled = true;
+        async init(filename) {
+            this.imgDisplay = {display: filename ? 'block' : 'none'};
+            if (filename) {
+                try { const result = await request.get('/files/initAvatar/' + filename); this.image = result.data.data; }
+                catch (_) { this.imgDisplay = {display: 'none'}; }
             }
         },
-        //发送请求，获取头像
-        async init(data) {
-            if (data === null || data === "") {
-                console.log("用户未设置头像");
-                this.imgDisplay = {display: "none"};
-            } else {
-                this.imgDisplay = {display: "block"};
-                console.log("头像名称：" + data);
-                await request.get("/files/initAvatar/" + data).then((res) => {
-                    if (res.code === "0") {
-                        this.image = res.data.data;
-                    } else {
-                        ElMessage({
-                            message: res.msg,
-                            type: "error",
-                        });
-                    }
-                });
-            }
-        },
-        async uploadSuccess() {
-            this.form = JSON.parse(sessionStorage.getItem("user"));
-            await request.post("/files/uploadAvatar/" + this.identity, this.form).then((res) => {
-                if (res.code === "0") {
-                    ElMessage({
-                        message: "设置成功",
-                        type: "success",
-                    });
-                    //获取头像文件名
-                    this.avatar = res.data;
-                    console.log("上传成功：" + this.avatar);
-                    this.find();
-                    this.init(this.avatar);
-                } else {
-                    ElMessage({
-                        message: res.msg,
-                        type: "error",
-                    });
-                }
-            });
-        },
-    },
+        async uploadAvatar({file, onSuccess, onError}) {
+            const body = new FormData(); body.append('file', file);
+            try { const result = await request.post('/files/avatar', body); await this.find(); onSuccess(result); ElMessage.success('头像已更新'); }
+            catch (error) { onError(error); }
+        }
+    }
 };

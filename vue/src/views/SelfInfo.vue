@@ -8,8 +8,7 @@
             <div style="display: flex">
                 <div style="width: 600px; margin-left: 30px; position: relative">
                     <div>
-                        <el-upload :on-success="uploadSuccess" :show-file-list="false"
-                                   action="http://localhost:9090/files/upload/"
+                        <el-upload action="/api/files/avatar" accept="image/png,image/jpeg,image/gif,image/webp" :http-request="uploadAvatar" :show-file-list="false"
                                    class="upload-demo"
                         >
                             <div class="AvatarDiv">
@@ -25,7 +24,7 @@
                             </div>
                         </el-upload>
                     </div>
-                    <el-descriptions :column="1" :size="large" border style="min-width: 500px" title="">
+                    <el-descriptions :column="1" size="large" border style="min-width: 500px" title="">
                         <el-descriptions-item>
                             <template #label>
                                 <div>
@@ -98,6 +97,7 @@
                                    @click="Edit">
                         </el-button>
                     </el-tooltip>
+                    <el-button style="margin-left:12px;margin-top:30px" @click="openPassword">修改密码</el-button>
                 </div>
                 <div class="img" style="margin-left: 130px ">
                     <img alt="" src="../../public/self_Space.png"/>
@@ -110,19 +110,6 @@
                         <el-form-item label="账号" prop="username">
                             <el-input v-model="form.username" disabled style="width: 80%"></el-input>
                         </el-form-item>
-                        <el-form-item label="密码" prop="password">
-                            <el-input v-model="form.password" :disabled="disabled" :show-password="showpassword"
-                                      show-password
-                                      style="width: 80%"></el-input>
-                            <el-tooltip content="修改密码" placement="right">
-                                <el-icon size="large" style="margin-left: 5px; cursor: pointer" @click="EditPass">
-                                    <edit/>
-                                </el-icon>
-                            </el-tooltip>
-                        </el-form-item>
-                        <el-form-item :style="display" label="确认密码" prop="checkPass">
-                            <el-input v-model="form.checkPass" show-password style="width: 80%"></el-input>
-                        </el-form-item>
                         <el-form-item label="姓名" prop="name">
                             <el-input v-model="form.name" style="width: 80%"></el-input>
                         </el-form-item>
@@ -134,7 +121,7 @@
                             <el-input v-model.number="form.age" style="width: 80%"></el-input>
                         </el-form-item>
                         <el-form-item label="手机号" prop="phoneNum">
-                            <el-input v-model.number="form.phoneNum" style="width: 80%"></el-input>
+                            <el-input v-model="form.phoneNum" style="width: 80%"></el-input>
                         </el-form-item>
                         <el-form-item label="邮箱地址" prop="email">
                             <el-input v-model="form.email" style="width: 80%"></el-input>
@@ -148,6 +135,14 @@
                     </template>
                 </el-dialog>
             </div>
+            <el-dialog v-model="passwordDialog" title="修改密码" width="420px" @closed="passwordForm={currentPassword:'',newPassword:'',confirmPassword:''}">
+                <el-form label-width="100px">
+                    <el-form-item label="原密码"><el-input v-model="passwordForm.currentPassword" show-password autocomplete="current-password" /></el-form-item>
+                    <el-form-item label="新密码"><el-input v-model="passwordForm.newPassword" show-password autocomplete="new-password" maxlength="64" /></el-form-item>
+                    <el-form-item label="确认密码"><el-input v-model="passwordForm.confirmPassword" show-password autocomplete="new-password" maxlength="64" /></el-form-item>
+                </el-form>
+                <template #footer><el-button @click="passwordDialog=false">取消</el-button><el-button type="primary" @click="changePassword">确认修改</el-button></template>
+            </el-dialog>
         </el-card>
     </div>
 </template>

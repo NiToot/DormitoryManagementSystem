@@ -21,6 +21,8 @@ public class DormManagerServiceImpl extends ServiceImpl<DormManagerMapper, DormM
      */
     @Resource
     private DormManagerMapper dormManagerMapper;
+    @Resource private com.example.springboot.security.Accounts accounts;
+    @Resource private com.example.springboot.security.AccessScope scope;
 
     /**
      * 宿管登录
@@ -29,9 +31,8 @@ public class DormManagerServiceImpl extends ServiceImpl<DormManagerMapper, DormM
     public DormManager dormManagerLogin(String username, String password) {
         QueryWrapper<DormManager> qw = new QueryWrapper<>();
         qw.eq("username", username);
-        qw.eq("password", password);
         DormManager dormManager = dormManagerMapper.selectOne(qw);
-        if (dormManager != null) {
+        if (dormManager != null && accounts.matches(password, dormManager.getPassword())) {
             return dormManager;
         } else {
             return null;
@@ -43,6 +44,8 @@ public class DormManagerServiceImpl extends ServiceImpl<DormManagerMapper, DormM
      */
     @Override
     public int addNewDormManager(DormManager dormManager) {
+        dormManager.setPassword(accounts.encode(dormManager.getPassword()));
+        dormManager.setAvatar(null);
         int insert = dormManagerMapper.insert(dormManager);
         return insert;
     }
@@ -64,6 +67,9 @@ public class DormManagerServiceImpl extends ServiceImpl<DormManagerMapper, DormM
      */
     @Override
     public int updateNewDormManager(DormManager dormManager) {
+        if (dormManager.getPassword()!=null && !dormManager.getPassword().isEmpty()) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST,"请通过独立密码接口修改密码");
+        dormManager.setPassword(null);
+        dormManager.setAvatar(null);
         int i = dormManagerMapper.updateById(dormManager);
         return i;
     }
