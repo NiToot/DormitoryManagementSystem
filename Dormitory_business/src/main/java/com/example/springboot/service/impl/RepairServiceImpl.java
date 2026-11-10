@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.springboot.entity.Repair;
 import com.example.springboot.mapper.RepairMapper;
 import com.example.springboot.service.RepairService;
+import com.example.springboot.security.RichTextSanitizer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -36,6 +37,7 @@ public class RepairServiceImpl extends ServiceImpl<RepairMapper, Repair> impleme
         repair.setId(null);repair.setStudentUsername(scope.user().username);repair.setRepairer((String)accounts.profile().get("name"));
         repair.setDormBuildId(room.getDormBuildId());repair.setDormRoomId(room.getDormRoomId());
         repair.setState("未完成");repair.setOrderBuildTime(java.time.LocalDateTime.now().toString());repair.setOrderFinishTime(null);
+        repair.setContent(RichTextSanitizer.forWrite(repair.getContent()));
         int insert = repairMapper.insert(repair);
         return insert;
     }
@@ -45,22 +47,24 @@ public class RepairServiceImpl extends ServiceImpl<RepairMapper, Repair> impleme
      */
     @Override
     public Page find(Integer pageNum, Integer pageSize, String search) {
-        Page page = new Page<>(pageNum, pageSize);
+        Page<Repair> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Repair> qw = new QueryWrapper<>();
         qw.like("title", search);
         scope.repairs(qw);
-        Page orderPage = repairMapper.selectPage(page, qw);
+        Page<Repair> orderPage = repairMapper.selectPage(page, qw);
+        sanitizePage(orderPage);
         return orderPage;
     }
 
     @Override
     public Page individualFind(Integer pageNum, Integer pageSize, String search, String name) {
-        Page page = new Page<>(pageNum, pageSize);
+        Page<Repair> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Repair> qw = new QueryWrapper<>();
         qw.like("title", search);
         scope.repairs(qw);
         if(!scope.student())qw.eq("repairer", name);
-        Page orderPage = repairMapper.selectPage(page, qw);
+        Page<Repair> orderPage = repairMapper.selectPage(page, qw);
+        sanitizePage(orderPage);
         return orderPage;
     }
 
@@ -72,6 +76,7 @@ public class RepairServiceImpl extends ServiceImpl<RepairMapper, Repair> impleme
         Repair old=repairMapper.selectById(repair.getId());scope.require(old!=null);
         if(!scope.admin()){scope.ownBuilding(old.getDormBuildId());scope.require(old.getStudentUsername()!=null);}
         repair.setStudentUsername(old.getStudentUsername());repair.setRepairer(old.getRepairer());repair.setDormBuildId(old.getDormBuildId());repair.setDormRoomId(old.getDormRoomId());
+        repair.setContent(RichTextSanitizer.forWrite(repair.getContent()));
         int i = repairMapper.updateById(repair);
         Assert.notNull(i, "保修单为空");
         return i;
@@ -98,5 +103,9 @@ public class RepairServiceImpl extends ServiceImpl<RepairMapper, Repair> impleme
         scope.repairs(qw);
         int orderCount = Math.toIntExact(repairMapper.selectCount(qw));
         return orderCount;
+    }
+
+    private void sanitizePage(Page<Repair> page) {
+        page.getRecords().forEach(repair -> repair.setContent(RichTextSanitizer.forDisplay(repair.getContent())));
     }
 }

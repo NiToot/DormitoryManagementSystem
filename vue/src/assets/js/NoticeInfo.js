@@ -100,6 +100,8 @@ export default {
                 this.$refs.form.resetFields();
                 //加载wangEdit
                 editor = new E("#div1");
+                editor.config.menus = ['head', 'bold', 'italic', 'underline', 'strikeThrough',
+                    'link', 'list', 'quote', 'table', 'code', 'undo', 'redo'];
                 editor.create();
                 this.disabled = false;
                 this.form = {};
@@ -168,6 +170,8 @@ export default {
                 this.$refs.form.resetFields();
                 //加载wangEdit
                 editor = new E("#div1");
+                editor.config.menus = ['head', 'bold', 'italic', 'underline', 'strikeThrough',
+                    'link', 'list', 'quote', 'table', 'code', 'undo', 'redo'];
                 editor.create();
                 // 生拷贝
                 this.form = JSON.parse(JSON.stringify(row));

@@ -62,6 +62,7 @@
               </el-form-item>
               <el-form-item label="内容" prop="content">
                 <div id="div1" style="width: 74%; margin: 4px 0"></div>
+                <div style="color: #606266; font-size: 12px">支持文字、列表、表格和网页链接；不支持图片、视频和自定义样式。</div>
               </el-form-item>
               <el-form-item label="发布时间" prop="releaseTime" style="margin-top: 27px">
                 <el-date-picker

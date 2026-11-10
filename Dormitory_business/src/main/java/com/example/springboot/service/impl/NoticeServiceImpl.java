@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.springboot.entity.Notice;
 import com.example.springboot.mapper.NoticeMapper;
 import com.example.springboot.service.NoticeService;
+import com.example.springboot.security.RichTextSanitizer;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -28,6 +28,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      */
     @Override
     public int addNewNotice(Notice notice) {
+        notice.setContent(RichTextSanitizer.forWrite(notice.getContent()));
         int insert = noticeMapper.insert(notice);
         return insert;
     }
@@ -37,11 +38,11 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      */
     @Override
     public Page find(Integer pageNum, Integer pageSize, String search) {
-        Page page = new Page<>(pageNum, pageSize);
+        Page<Notice> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Notice> qw = new QueryWrapper<>();
         qw.like("title", search);
-//        Assert.notNull(qw,"不可为空");
-        Page noticePage = noticeMapper.selectPage(page, qw);
+        Page<Notice> noticePage = noticeMapper.selectPage(page, qw);
+        noticePage.getRecords().forEach(notice -> notice.setContent(RichTextSanitizer.forDisplay(notice.getContent())));
         return noticePage;
     }
 
@@ -50,6 +51,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      */
     @Override
     public int updateNewNotice(Notice notice) {
+        notice.setContent(RichTextSanitizer.forWrite(notice.getContent()));
         int i = noticeMapper.updateById(notice);
         return i;
     }
@@ -71,6 +73,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         QueryWrapper<Notice> qw = new QueryWrapper<>();
         qw.orderByDesc("release_time");
         List<Notice> noticeList = noticeMapper.selectList(qw);
+        noticeList.forEach(notice -> notice.setContent(RichTextSanitizer.forDisplay(notice.getContent())));
         return noticeList;
         
     }
